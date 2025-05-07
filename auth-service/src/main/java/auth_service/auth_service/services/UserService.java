@@ -1,6 +1,8 @@
 package auth_service.auth_service.services;
 
 
+import auth_service.auth_service.configs.PasswordEncoderConfig;
+import auth_service.auth_service.dtos.RegistrationUserDto;
 import auth_service.auth_service.repositories.RoleRepository;
 import auth_service.auth_service.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import auth_service.auth_service.entities.User;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +22,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+    private final PasswordEncoderConfig passwordEncoderConfig;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -42,8 +45,12 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public void createNewUser(User user) {
-        user.setRoles(List.of(roleRepository.findByName("ROLE_USER").get()));
+    public void createNewUser(RegistrationUserDto registrationUserDto) {
+        User user = new User();
+        user.setUsername(registrationUserDto.getUsername());
+        user.setPassword(passwordEncoderConfig.passwordEncoder().encode(registrationUserDto.getPassword()));
+        user.setRoles(List.of(roleService.findRoleByName("ROLE_USER")));
+
         userRepository.save(user);
     }
 }
