@@ -1,10 +1,10 @@
-package auth_service.auth_service;
+package profile_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthServiceApplicationTests {
+class ProfileServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
