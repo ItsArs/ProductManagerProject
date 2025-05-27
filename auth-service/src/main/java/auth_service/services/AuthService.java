@@ -40,7 +40,7 @@ public class AuthService {
             return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Wrong username or password"), HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
-        String token = jwtTokenUtils.generateToken(userDetails);
+        String token = jwtTokenUtils.generateToken(userDetails, userService.findByUsername(authRequest.getUsername()).get().getEmail());
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
