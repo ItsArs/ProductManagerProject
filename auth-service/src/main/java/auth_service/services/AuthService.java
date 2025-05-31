@@ -56,7 +56,7 @@ public class AuthService {
 
         userService.createNewUser(registrationUserDto);
         User user = userService.findByUsername(registrationUserDto.getUsername()).get();
-        CreatedUserEvent createdUserEvent = new CreatedUserEvent(user.getUsername(), user.getRoles().stream().map(Role::getName).toList());
+        CreatedUserEvent createdUserEvent = new CreatedUserEvent(user.getUsername(), user.getEmail(), user.getRoles().stream().map(Role::getName).toList());
 
         CompletableFuture<SendResult<String, CreatedUserEvent>> future = kafkaTemplate.send("user-created-events-topic", "user", createdUserEvent);
 

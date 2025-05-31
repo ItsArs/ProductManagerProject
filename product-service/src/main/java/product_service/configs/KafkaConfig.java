@@ -36,4 +36,13 @@ public class KafkaConfig {
                 .configs(Map.of("min.insync.replicas", "2"))
                 .build();
     };
+
+    @Bean
+    NewTopic updateUserTopic(){
+        return TopicBuilder.name("user-updated-events-topic")
+                .partitions(3)
+                .replicas(3)
+                .configs(Map.of("min.insync.replicas", "2"))
+                .build();
+    };
 }
