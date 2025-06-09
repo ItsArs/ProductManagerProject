@@ -1,8 +1,8 @@
 package notification_service.services;
 
 import core.CreatedUserEvent;
-import core.UpdatedUserEvent;
 import lombok.RequiredArgsConstructor;
+import notification_service.dtos.UserDTO;
 import notification_service.entities.User;
 import notification_service.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -36,13 +36,12 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UpdatedUserEvent updatedUserEvent) {
-        User user = userRepository.findByUsername(updatedUserEvent.getUsername());
+    public void updateUser(UserDTO userDTO) {
+        User user = userRepository.findByUsername(userDTO.getUsername());
 
-        user.setEmail(updatedUserEvent.getEmail());
-        user.setUpdatedNotifications(updatedUserEvent.isUpdatedNotifications());
-        user.setDeletedNotifications(updatedUserEvent.isDeletedNotifications());
-        user.setCreatedNotifications(updatedUserEvent.isCreatedNotifications());
+        user.setUpdatedNotifications(userDTO.isUpdatedNotifications());
+        user.setDeletedNotifications(userDTO.isDeletedNotifications());
+        user.setCreatedNotifications(userDTO.isCreatedNotifications());
 
         userRepository.save(user);
     }

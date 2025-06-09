@@ -2,6 +2,7 @@ package auth_service.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Collection;
@@ -16,6 +17,7 @@ public class User {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @Column(name = "username")
     private String username;
 
