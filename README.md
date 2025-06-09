@@ -2,7 +2,7 @@
 
 Microservice-based product management system with notifications built on Spring Boot and Kafka.
 
-## 📌 Table of Contents
+## Table of Contents
 - [Technology Stack](#-technology-stack)
 - [System Architecture](#-system-architecture)
 - [API Endpoints](#-api-endpoints)
@@ -33,67 +33,85 @@ Microservice-based product management system with notifications built on Spring 
 ---
 
 ## System Architecture
-``mermaid
+```mermaid
 flowchart LR
     A[Client] -->|HTTP| B[Auth Service]
     A -->|HTTP| C[Product Service]
     A -->|HTTP| D[Notification Service]
     B -->|Kafka: user-created-events-topic| D
     C -->|Kafka: product-*-events-topic| D
-
+```
 ---
 
 ## API Endpoints
  - Auth Service
-Method |	Endpoint      |	Description                |	Required Role
-POST   |	/auth         |	Authentication (JWT token) |	-
-POST   |	/registration |	User registration          |	-
-GET    |	/users        |	Get all users              |	ADMIN
-GET    |	/info         |	Get current user info      |	USER/ADMIN
+
+|Method |	Endpoint      |	Description                |	Required Role|
+|-------|---------------|----------------------------|---------------|
+|POST   |	`/auth`       |	Authentication (JWT token) |	-            |
+|POST   |`/registration`|	User registration          |	-            |
+|GET    |	`/users`      |	Get all users              |	ADMIN        |
+|GET    |	`/info`       |	Get current user info      |	USER/ADMIN   |
+
  - Product Service
-Method | Endpoint |	Description          |	Required Role
-GET    |	/all    |	Get all products     |	-
-GET    |	/{id}   |	Get specific product |	-
-POST   |	/create |	Create new product   |	ADMIN
-PATCH  |	/{id}   |	Update product       |	ADMIN
-DELETE |	/{id}   |	Delete product       |	ADMIN
+
+|Method | Endpoint|	Description        |	Required Role|
+|-------|---------|----------------------|---------------|
+|GET    |	`/all`  |	Get all products     |	-            |
+|GET    |	`/{id}` |	Get specific product |	-            |
+|POST   |`/create`|	Create new product   |	ADMIN        |
+|PATCH  |`/{id}`  |	Update product       |	ADMIN        |
+|DELETE |`/{id}`  |	Delete product       |	ADMIN        |
+
  - Notification Service
-Method |	Endpoint          |	Description                     | Required Role
-PATCH  |	/notification-set |	Configure notification settings | any, Authtorized
+
+|Method |	Endpoint            |	Description                     | Required Role    |
+|-------|---------------------|---------------------------------|------------------|
+|PATCH  |	`/notification-set` |	Configure notification settings | any, Authtorized |
 
 ---
 
 # Kafka Topics
-Topic Name                   |	Event Type       |	Handler Class
-user-created-events-topic    |	User creation    |	UserEventsHandler
-product-created-events-topic |	Product creation |	ProductEventsHandler
-product-updated-events-topic |	Product update   |	ProductEventsHandler
-product-deleted-events-topic |	Product deletion |	ProductEventsHandler
+|Topic Name                   |	Event Type       |	Handler Class       |
+|-----------------------------|------------------|----------------------|
+|user-created-events-topic    |	User creation    |	UserEventsHandler   |
+|product-created-events-topic |	Product creation |	ProductEventsHandler|
+|product-updated-events-topic |	Product update   |	ProductEventsHandler|
+|product-deleted-events-topic |	Product deletion |	ProductEventsHandler|
 
 ---
 
 ## Getting Started
 1. Start Kafka Cluster
 
+```bash
 docker-compose -f kafka-docker-compose.yml up -d
+```
 
 2. Run Services
 
-# Auth Service
-./mvnw spring-boot:run -pl auth
+- Auth Service
+```bash
+./mvnw spring-boot:run -pl auth-service
+```
 
-# Product Service
-./mvnw spring-boot:run -pl product
+- Product Service
+```bash
+./mvnw spring-boot:run -pl product-service
+```
 
-# Notification Service
-./mvnw spring-boot:run -pl notification
+- Notification Service
+```bash
+./mvnw spring-boot:run -pl notification-service
+```
 
 ---
 
 ## Request Examples
-User Registration:
+- User Registration:
 
---POST /registration
+```http
+POST /registration
 Content-Type: application/json
 
 {
@@ -102,9 +120,10 @@ Content-Type: application/json
   "password": "password",
   "confirm_password": "password"
 }
+```
+- Product Creation:
 
---Product Creation:
-
+```http
 POST /create
 Authorization: Bearer {JWT_TOKEN}
 Content-Type: application/json
@@ -113,6 +132,7 @@ Content-Type: application/json
   "name": "iPhone 15",
   "price": 999.99
 }
+```
 
 ---
 
