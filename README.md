@@ -3,13 +3,13 @@
 Microservice-based product management system with notifications built on Spring Boot and Kafka.
 
 ## Table of Contents
-- [Technology Stack](#-technology-stack)
-- [System Architecture](#-system-architecture)
-- [API Endpoints](#-api-endpoints)
-- [Kafka Topics](#-kafka-topics)
-- [Getting Started](#-getting-started)
-- [Request Examples](#-request-examples)
-- [Logging](#-logging)
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [API Endpoints](#api-endpoints)
+- [Kafka Topics](#kafka-topics)
+- [Getting Started](#getting-started)
+- [Request Examples](#request-examples)
+- [Logging](#logging)
 
 ---
 
