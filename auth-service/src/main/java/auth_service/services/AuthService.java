@@ -14,7 +14,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +61,13 @@ public class AuthService {
         User user = userService.findByUsername(registrationUserDto.getUsername()).get();
         CreatedUserEvent createdUserEvent = new CreatedUserEvent(user.getUsername(), user.getEmail(), user.getRoles().stream().map(Role::getName).toList());
 
-        CompletableFuture<SendResult<String, CreatedUserEvent>> future = kafkaTemplate.send("user-created-events-topic", "user", createdUserEvent);
+
+        CompletableFuture<SendResult<String, CreatedUserEvent>> future = kafkaTemplate.send(MessageBuilder
+                .withPayload(createdUserEvent)
+                .setHeader(KafkaHeaders.TOPIC, "user-created-events-topic")
+                .setHeader(KafkaHeaders.KEY, "user")
+                .setHeader(JsonSerializer.TYPE_MAPPINGS, "userCreated")
+                .build());
 
         future.whenComplete((result, throwable) -> {
             if (throwable != null) {

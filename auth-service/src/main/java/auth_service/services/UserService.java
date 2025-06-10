@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -47,6 +48,7 @@ public class UserService implements UserDetailsService {
         );
     }
 
+    @Transactional
     public void createNewUser(RegistrationUserDto registrationUserDto) {
         User user = new User();
         user.setUsername(registrationUserDto.getUsername());

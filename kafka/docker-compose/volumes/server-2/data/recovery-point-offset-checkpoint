@@ -1,2 +1,29 @@
 0
-0
+27
+user-updated-events-topic 1 0
+__consumer_offsets 48 0
+__consumer_offsets 13 0
+__consumer_offsets 44 0
+product-created-events-topic 1 0
+__consumer_offsets 30 0
+__consumer_offsets 28 0
+user-created-events-topic 1 0
+__consumer_offsets 7 0
+__consumer_offsets 40 0
+__consumer_offsets 38 0
+__consumer_offsets 1 0
+__consumer_offsets 47 0
+__consumer_offsets 16 0
+user-updated-events-topic 2 0
+product-updated-events-topic 1 0
+__consumer_offsets 10 0
+__consumer_offsets 24 0
+__consumer_offsets 22 0
+product-created-events-topic 0 0
+__consumer_offsets 18 0
+user-created-events-topic 2 1
+user-created-events-topic 0 0
+__consumer_offsets 35 0
+__consumer_offsets 4 0
+user-updated-events-topic 0 0
+product-deleted-events-topic 1 0
