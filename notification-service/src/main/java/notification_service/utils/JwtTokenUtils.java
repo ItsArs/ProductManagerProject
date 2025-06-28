@@ -1,5 +1,4 @@
-package product_service.utils;
-
+package notification_service.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
 
 @Component
 public class JwtTokenUtils {

@@ -5,10 +5,9 @@ import notification_service.dtos.UserDTO;
 import notification_service.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +16,12 @@ public class UserController {
 
 
     @PatchMapping("/notification-set")
-    public ResponseEntity<?> setNotification(@RequestBody UserDTO userDTO) {
-        userService.updateUser(userDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> setNotification(@RequestBody UserDTO userDTO, Principal principal) {
+        return userService.updateUser(userDTO, principal);
+    }
+
+    @GetMapping("/notification-check")
+    public ResponseEntity<?> checkNotification(Principal principal) {
+        return userService.getUserByUsername(principal.getName());
     }
 }

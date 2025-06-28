@@ -2,6 +2,7 @@ package product_service.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import product_service.dtos.ProductDto;
 import product_service.entities.Product;
@@ -27,17 +28,17 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public HttpStatus createProduct(@RequestBody ProductDto product) {
+    public ResponseEntity<?> createProduct(@RequestBody ProductDto product) {
         return productService.createNewProduct(product);
     }
 
     @PatchMapping("/{id}")
-    public HttpStatus updatePrice(@PathVariable int id, @RequestBody double newPrice) {
+    public ResponseEntity<?> updatePrice(@PathVariable int id, @RequestBody double newPrice) {
         return productService.updatePrice(id, newPrice);
     }
 
     @DeleteMapping("{id}")
-    public HttpStatus deleteProduct(@PathVariable int id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
         return productService.deleteProduct(id);
     }
 }

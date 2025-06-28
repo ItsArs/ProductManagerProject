@@ -6,7 +6,9 @@ import core.product.ProductDeletedEvent;
 import core.product.ProductUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 @Transactional(readOnly = true)
 public class ProductService{
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
     private final KafkaTemplate<String, ProductCreatedEvent> kafkaTemplateCreatedProduct;
     private final KafkaTemplate<String, ProductUpdatedEvent> kafkaTemplateUpdatedProduct;
     private final KafkaTemplate<String, ProductDeletedEvent> kafkaTemplateDeletedProduct;
@@ -43,11 +46,8 @@ public class ProductService{
     }
 
     @Transactional
-    public HttpStatus createNewProduct(ProductDto productDto) {
-        Product product = new Product();
-
-        product.setProductName(productDto.getProductName());
-        product.setProductPrice(productDto.getProductPrice());
+    public ResponseEntity<?> createNewProduct(ProductDto productDto) {
+        Product product = modelMapper.map(productDto, Product.class);
         product.setCreatedAt(LocalDateTime.now());
 
         productRepository.save(product);
@@ -63,18 +63,16 @@ public class ProductService{
                 log.info("ProductCreatedEvent done successfully: {}", result.getRecordMetadata());
             }
         });
-
-
-        return HttpStatus.CREATED;
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Transactional
-    public HttpStatus updatePrice(int id, double newPrice) {
+    public ResponseEntity<?> updatePrice(int id, double newPrice) {
         Product product = new Product();
         if (productRepository.findById(id).isPresent()) {
             product = productRepository.findById(id).get();
         } else {
-            return HttpStatus.NOT_FOUND;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         double oldPrice = product.getProductPrice();
         product.setProductPrice(newPrice);
@@ -93,11 +91,11 @@ public class ProductService{
         });
 
 
-        return HttpStatus.OK;
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Transactional
-    public HttpStatus deleteProduct(int id) {
+    public ResponseEntity<?> deleteProduct(int id) {
         if (productRepository.findById(id).isPresent()) {
             Product product = productRepository.findById(id).get();
             productRepository.deleteById(id);
@@ -114,9 +112,9 @@ public class ProductService{
                 }
             });
 
-            return HttpStatus.OK;
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            return HttpStatus.NOT_FOUND;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
